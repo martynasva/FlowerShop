@@ -18,7 +18,7 @@ namespace FlowerShop.Models
 
 
         [Column("OrderStatus")]
-        public string OrderStatusStrung
+        public string OrderStatusString
         {
             get { return OrderStatus.ToString(); }
             private set { OrderStatus = value.ParseEnum<OrderStatus>(); }
