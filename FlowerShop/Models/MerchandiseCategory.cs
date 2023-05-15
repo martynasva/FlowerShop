@@ -7,7 +7,7 @@ namespace FlowerShop.Models
         [Key]
         public Guid ID { get; set; }
 
-        public virtual MerchandiseCategory ParentCategory { get; set; }
+        public virtual ICollection<MerchandiseCategory> ParentCategory { get; set; }
 
         [Required]
         public string Name;
