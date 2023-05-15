@@ -53,29 +53,6 @@ namespace FlowerShop.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Discounts",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "uuid", nullable: false),
-                    MerchandiseID = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    ActiveUntil = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    DiscountPercentage = table.Column<decimal>(type: "numeric", nullable: true),
-                    DiscountAmmount = table.Column<decimal>(type: "numeric", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Discounts", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Discounts_Merchandises_MerchandiseID",
-                        column: x => x.MerchandiseID,
-                        principalTable: "Merchandises",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "MerchandiseCategories",
                 columns: table => new
                 {
@@ -129,17 +106,11 @@ namespace FlowerShop.Data.Migrations
                     Password = table.Column<string>(type: "text", nullable: false),
                     PhoneNumber = table.Column<string>(type: "text", nullable: false),
                     Address = table.Column<string>(type: "text", nullable: false),
-                    UserTypeID = table.Column<Guid>(type: "uuid", nullable: false),
-                    DiscountID = table.Column<Guid>(type: "uuid", nullable: true)
+                    UserTypeID = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Users_Discounts_DiscountID",
-                        column: x => x.DiscountID,
-                        principalTable: "Discounts",
-                        principalColumn: "ID");
                     table.ForeignKey(
                         name: "FK_Users_UserTypes_UserTypeID",
                         column: x => x.UserTypeID,
@@ -175,32 +146,6 @@ namespace FlowerShop.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Complaints",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserID = table.Column<Guid>(type: "uuid", nullable: false),
-                    OrderID = table.Column<Guid>(type: "uuid", nullable: false),
-                    ComplaintText = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Complaints", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Complaints_Orders_OrderID",
-                        column: x => x.OrderID,
-                        principalTable: "Orders",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Complaints_Users_UserID",
-                        column: x => x.UserID,
-                        principalTable: "Users",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Items",
                 columns: table => new
                 {
@@ -227,61 +172,6 @@ namespace FlowerShop.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "OrderLogs",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "uuid", nullable: false),
-                    OrderID = table.Column<Guid>(type: "uuid", nullable: false),
-                    LogText = table.Column<string>(type: "text", nullable: true),
-                    Timestamp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderLogs", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_OrderLogs_Orders_OrderID",
-                        column: x => x.OrderID,
-                        principalTable: "Orders",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Payments",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "uuid", nullable: false),
-                    PaymentType = table.Column<string>(type: "text", nullable: false),
-                    OrderID = table.Column<Guid>(type: "uuid", nullable: false),
-                    PaymentStatus = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Payments", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Payments_Orders_OrderID",
-                        column: x => x.OrderID,
-                        principalTable: "Orders",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Complaints_OrderID",
-                table: "Complaints",
-                column: "OrderID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Complaints_UserID",
-                table: "Complaints",
-                column: "UserID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Discounts_MerchandiseID",
-                table: "Discounts",
-                column: "MerchandiseID");
-
             migrationBuilder.CreateIndex(
                 name: "IX_Items_MerchandiseID",
                 table: "Items",
@@ -303,11 +193,6 @@ namespace FlowerShop.Data.Migrations
                 column: "ParentCategoryID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderLogs_OrderID",
-                table: "OrderLogs",
-                column: "OrderID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Orders_DeliveryID",
                 table: "Orders",
                 column: "DeliveryID");
@@ -316,16 +201,6 @@ namespace FlowerShop.Data.Migrations
                 name: "IX_Orders_UserID",
                 table: "Orders",
                 column: "UserID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Payments_OrderID",
-                table: "Payments",
-                column: "OrderID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_DiscountID",
-                table: "Users",
-                column: "DiscountID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_UserTypeID",
@@ -342,22 +217,16 @@ namespace FlowerShop.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Complaints");
-
-            migrationBuilder.DropTable(
                 name: "Items");
 
             migrationBuilder.DropTable(
                 name: "MerchandiseCategories");
 
             migrationBuilder.DropTable(
-                name: "OrderLogs");
-
-            migrationBuilder.DropTable(
-                name: "Payments");
-
-            migrationBuilder.DropTable(
                 name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "Merchandises");
 
             migrationBuilder.DropTable(
                 name: "Deliveries");
@@ -366,13 +235,7 @@ namespace FlowerShop.Data.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Discounts");
-
-            migrationBuilder.DropTable(
                 name: "UserTypes");
-
-            migrationBuilder.DropTable(
-                name: "Merchandises");
 
             migrationBuilder.DropTable(
                 name: "UserPermissions");

@@ -11,16 +11,18 @@ namespace FlowerShop.Data
         
         public DataContext(DbContextOptions options) : base(options) 
         {  
+            
         }
-        public DbSet<Complaint> Complaints { get; set; }
+
+       // public DbSet<Complaint> Complaints { get; set; }
         public DbSet<Delivery> Deliveries { get; set; }
-        public DbSet<Discount> Discounts { get; set; }
+       // public DbSet<Discount> Discounts { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<Merchandise> Merchandises { get; set; }
         public DbSet<MerchandiseCategory> MerchandiseCategories { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderLog> OrderLogs { get; set; }
-        public DbSet<Payment> Payments { get; set; }
+        //public DbSet<OrderLog> OrderLogs { get; set; } 
+        //public DbSet<Payment> Payments { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserPermission> UserPermissions { get; set; }
         public DbSet<UserType> UserTypes { get; set; }

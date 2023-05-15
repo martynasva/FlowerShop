@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FlowerShop.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230515071622_InitialCreate")]
+    [Migration("20230515183805_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -24,31 +24,6 @@ namespace FlowerShop.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("FlowerShop.Models.Complaint", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ComplaintText")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("OrderID")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("UserID")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("OrderID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Complaints");
-                });
 
             modelBuilder.Entity("FlowerShop.Models.Delivery", b =>
                 {
@@ -69,38 +44,6 @@ namespace FlowerShop.Data.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Deliveries");
-                });
-
-            modelBuilder.Entity("FlowerShop.Models.Discount", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("ActiveUntil")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<decimal?>("DiscountAmmount")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("DiscountPercentage")
-                        .HasColumnType("numeric");
-
-                    b.Property<Guid>("MerchandiseID")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("MerchandiseID");
-
-                    b.ToTable("Discounts");
                 });
 
             modelBuilder.Entity("FlowerShop.Models.Item", b =>
@@ -199,54 +142,6 @@ namespace FlowerShop.Data.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("FlowerShop.Models.OrderLog", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("LogText")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("OrderID")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("Timestamp")
-                        .IsRequired()
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("OrderID");
-
-                    b.ToTable("OrderLogs");
-                });
-
-            modelBuilder.Entity("FlowerShop.Models.Payment", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("OrderID")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("PaymentStatusString")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("PaymentStatus");
-
-                    b.Property<string>("PaymentType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("OrderID");
-
-                    b.ToTable("Payments");
-                });
-
             modelBuilder.Entity("FlowerShop.Models.User", b =>
                 {
                     b.Property<Guid>("ID")
@@ -256,9 +151,6 @@ namespace FlowerShop.Data.Migrations
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<Guid?>("DiscountID")
-                        .HasColumnType("uuid");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -284,8 +176,6 @@ namespace FlowerShop.Data.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("DiscountID");
 
                     b.HasIndex("UserTypeID");
 
@@ -328,36 +218,6 @@ namespace FlowerShop.Data.Migrations
                     b.HasIndex("UserPermissionsID");
 
                     b.ToTable("UserTypes");
-                });
-
-            modelBuilder.Entity("FlowerShop.Models.Complaint", b =>
-                {
-                    b.HasOne("FlowerShop.Models.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FlowerShop.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("FlowerShop.Models.Discount", b =>
-                {
-                    b.HasOne("FlowerShop.Models.Merchandise", "Merchandise")
-                        .WithMany()
-                        .HasForeignKey("MerchandiseID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Merchandise");
                 });
 
             modelBuilder.Entity("FlowerShop.Models.Item", b =>
@@ -413,34 +273,8 @@ namespace FlowerShop.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("FlowerShop.Models.OrderLog", b =>
-                {
-                    b.HasOne("FlowerShop.Models.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("FlowerShop.Models.Payment", b =>
-                {
-                    b.HasOne("FlowerShop.Models.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-                });
-
             modelBuilder.Entity("FlowerShop.Models.User", b =>
                 {
-                    b.HasOne("FlowerShop.Models.Discount", null)
-                        .WithMany("ApplicableUsers")
-                        .HasForeignKey("DiscountID");
-
                     b.HasOne("FlowerShop.Models.UserType", "UserType")
                         .WithMany()
                         .HasForeignKey("UserTypeID")
@@ -459,11 +293,6 @@ namespace FlowerShop.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("UserPermissions");
-                });
-
-            modelBuilder.Entity("FlowerShop.Models.Discount", b =>
-                {
-                    b.Navigation("ApplicableUsers");
                 });
 
             modelBuilder.Entity("FlowerShop.Models.Merchandise", b =>
