@@ -1,10 +1,17 @@
 ﻿using FlowerShop.Models;
+using Microsoft.AspNetCore.Identity;
+
 using Microsoft.EntityFrameworkCore;
 
+// Temporary DataContext, we might not need to save everything to database.
 namespace FlowerShop.Data
 {
-    public class FlowerShopDbContext : DbContext
+    public class DataContext : DbContext
     {
+        
+        public DataContext(DbContextOptions options) : base(options) 
+        {  
+        }
         public DbSet<Complaint> Complaints { get; set; }
         public DbSet<Delivery> Deliveries { get; set; }
         public DbSet<Discount> Discounts { get; set; }
@@ -17,11 +24,5 @@ namespace FlowerShop.Data
         public DbSet<User> Users { get; set; }
         public DbSet<UserPermission> UserPermissions { get; set; }
         public DbSet<UserType> UserTypes { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            // Configure your database connection string here
-            optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Database=FlowerShopSystem;Trusted_Connection=True");
-        }
     }
 }

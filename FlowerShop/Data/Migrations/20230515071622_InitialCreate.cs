@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace FlowerShop.Migrations
+namespace FlowerShop.Data.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -15,10 +15,10 @@ namespace FlowerShop.Migrations
                 name: "Deliveries",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeliveryType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeliveryOptions = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    DeliveryDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DeliveryType = table.Column<string>(type: "text", nullable: true),
+                    DeliveryOptions = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -29,10 +29,10 @@ namespace FlowerShop.Migrations
                 name: "Merchandises",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,9 +43,9 @@ namespace FlowerShop.Migrations
                 name: "UserPermissions",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PermissionName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PermissionDescription = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    PermissionName = table.Column<string>(type: "text", nullable: false),
+                    PermissionDescription = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -56,13 +56,13 @@ namespace FlowerShop.Migrations
                 name: "Discounts",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MerchandiseID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ActiveUntil = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DiscountPercentage = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    DiscountAmmount = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    MerchandiseID = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    ActiveUntil = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DiscountPercentage = table.Column<decimal>(type: "numeric", nullable: true),
+                    DiscountAmmount = table.Column<decimal>(type: "numeric", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -79,9 +79,9 @@ namespace FlowerShop.Migrations
                 name: "MerchandiseCategories",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ParentCategoryID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MerchandiseID = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    ParentCategoryID = table.Column<Guid>(type: "uuid", nullable: false),
+                    MerchandiseID = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -103,9 +103,9 @@ namespace FlowerShop.Migrations
                 name: "UserTypes",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserPermissionsID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    UserPermissionsID = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -122,15 +122,15 @@ namespace FlowerShop.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserTypeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DiscountID = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Surname = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
+                    Address = table.Column<string>(type: "text", nullable: false),
+                    UserTypeID = table.Column<Guid>(type: "uuid", nullable: false),
+                    DiscountID = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -152,10 +152,10 @@ namespace FlowerShop.Migrations
                 name: "Orders",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DeliveryID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OrderStatus = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserID = table.Column<Guid>(type: "uuid", nullable: false),
+                    DeliveryID = table.Column<Guid>(type: "uuid", nullable: false),
+                    OrderStatus = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -178,10 +178,10 @@ namespace FlowerShop.Migrations
                 name: "Complaints",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OrderID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ComplaintText = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserID = table.Column<Guid>(type: "uuid", nullable: false),
+                    OrderID = table.Column<Guid>(type: "uuid", nullable: false),
+                    ComplaintText = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -204,11 +204,11 @@ namespace FlowerShop.Migrations
                 name: "Items",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MerchandiseID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OrderID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CountryOfOrigin = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateOfManufacture = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    MerchandiseID = table.Column<Guid>(type: "uuid", nullable: false),
+                    OrderID = table.Column<Guid>(type: "uuid", nullable: false),
+                    CountryOfOrigin = table.Column<string>(type: "text", nullable: true),
+                    DateOfManufacture = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -231,10 +231,10 @@ namespace FlowerShop.Migrations
                 name: "OrderLogs",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OrderID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LogText = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    OrderID = table.Column<Guid>(type: "uuid", nullable: false),
+                    LogText = table.Column<string>(type: "text", nullable: true),
+                    Timestamp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -251,10 +251,10 @@ namespace FlowerShop.Migrations
                 name: "Payments",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PaymentType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OrderID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PaymentStatus = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    PaymentType = table.Column<string>(type: "text", nullable: false),
+                    OrderID = table.Column<Guid>(type: "uuid", nullable: false),
+                    PaymentStatus = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
