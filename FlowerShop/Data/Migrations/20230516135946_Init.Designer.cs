@@ -9,11 +9,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace FlowerShop.Data.Migrations
+namespace FlowerShop.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230515192856_MerchandiceManyToMany")]
-    partial class MerchandiceManyToMany
+    [Migration("20230516135946_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,7 +41,13 @@ namespace FlowerShop.Data.Migrations
                     b.Property<string>("DeliveryType")
                         .HasColumnType("text");
 
+                    b.Property<Guid>("OrderID")
+                        .HasColumnType("uuid");
+
                     b.HasKey("ID");
+
+                    b.HasIndex("OrderID")
+                        .IsUnique();
 
                     b.ToTable("Deliveries");
                 });
@@ -57,6 +63,9 @@ namespace FlowerShop.Data.Migrations
 
                     b.Property<DateTime?>("DateOfManufacture")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("MerchandiceID")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("MerchandiseID")
                         .HasColumnType("uuid");
@@ -101,17 +110,12 @@ namespace FlowerShop.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("MerchandiseCategoryID")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("MerchandiseID")
+                    b.Property<Guid?>("ParentCategoryID")
                         .HasColumnType("uuid");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("MerchandiseCategoryID");
-
-                    b.HasIndex("MerchandiseID");
+                    b.HasIndex("ParentCategoryID");
 
                     b.ToTable("MerchandiseCategories");
                 });
@@ -120,9 +124,6 @@ namespace FlowerShop.Data.Migrations
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("DeliveryID")
                         .HasColumnType("uuid");
 
                     b.Property<string>("OrderStatusString")
@@ -134,8 +135,6 @@ namespace FlowerShop.Data.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("DeliveryID");
 
                     b.HasIndex("UserID");
 
@@ -220,6 +219,32 @@ namespace FlowerShop.Data.Migrations
                     b.ToTable("UserTypes");
                 });
 
+            modelBuilder.Entity("MerchandiseMerchandiseCategory", b =>
+                {
+                    b.Property<Guid>("CategoriesID")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("MerchandisesID")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("CategoriesID", "MerchandisesID");
+
+                    b.HasIndex("MerchandisesID");
+
+                    b.ToTable("MerchandiseMerchandiseCategory");
+                });
+
+            modelBuilder.Entity("FlowerShop.Models.Delivery", b =>
+                {
+                    b.HasOne("FlowerShop.Models.Order", "Order")
+                        .WithOne("Delivery")
+                        .HasForeignKey("FlowerShop.Models.Delivery", "OrderID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("FlowerShop.Models.Item", b =>
                 {
                     b.HasOne("FlowerShop.Models.Merchandise", "Merchandise")
@@ -241,30 +266,20 @@ namespace FlowerShop.Data.Migrations
 
             modelBuilder.Entity("FlowerShop.Models.MerchandiseCategory", b =>
                 {
-                    b.HasOne("FlowerShop.Models.MerchandiseCategory", null)
-                        .WithMany("ParentCategory")
-                        .HasForeignKey("MerchandiseCategoryID");
+                    b.HasOne("FlowerShop.Models.MerchandiseCategory", "ParentCategory")
+                        .WithMany()
+                        .HasForeignKey("ParentCategoryID");
 
-                    b.HasOne("FlowerShop.Models.Merchandise", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("MerchandiseID");
+                    b.Navigation("ParentCategory");
                 });
 
             modelBuilder.Entity("FlowerShop.Models.Order", b =>
                 {
-                    b.HasOne("FlowerShop.Models.Delivery", "Delivery")
-                        .WithMany()
-                        .HasForeignKey("DeliveryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("FlowerShop.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Delivery");
 
                     b.Navigation("User");
                 });
@@ -272,7 +287,7 @@ namespace FlowerShop.Data.Migrations
             modelBuilder.Entity("FlowerShop.Models.User", b =>
                 {
                     b.HasOne("FlowerShop.Models.UserType", "UserType")
-                        .WithMany()
+                        .WithMany("Users")
                         .HasForeignKey("UserTypeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -283,7 +298,7 @@ namespace FlowerShop.Data.Migrations
             modelBuilder.Entity("FlowerShop.Models.UserType", b =>
                 {
                     b.HasOne("FlowerShop.Models.UserPermission", "UserPermissions")
-                        .WithMany()
+                        .WithMany("UserTypes")
                         .HasForeignKey("UserPermissionsID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -291,19 +306,42 @@ namespace FlowerShop.Data.Migrations
                     b.Navigation("UserPermissions");
                 });
 
-            modelBuilder.Entity("FlowerShop.Models.Merchandise", b =>
+            modelBuilder.Entity("MerchandiseMerchandiseCategory", b =>
                 {
-                    b.Navigation("Categories");
-                });
+                    b.HasOne("FlowerShop.Models.MerchandiseCategory", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-            modelBuilder.Entity("FlowerShop.Models.MerchandiseCategory", b =>
-                {
-                    b.Navigation("ParentCategory");
+                    b.HasOne("FlowerShop.Models.Merchandise", null)
+                        .WithMany()
+                        .HasForeignKey("MerchandisesID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FlowerShop.Models.Order", b =>
                 {
+                    b.Navigation("Delivery")
+                        .IsRequired();
+
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("FlowerShop.Models.User", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("FlowerShop.Models.UserPermission", b =>
+                {
+                    b.Navigation("UserTypes");
+                });
+
+            modelBuilder.Entity("FlowerShop.Models.UserType", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

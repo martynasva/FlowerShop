@@ -3,26 +3,29 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace FlowerShop.Data.Migrations
+namespace FlowerShop.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Deliveries",
+                name: "MerchandiseCategories",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "uuid", nullable: false),
-                    DeliveryDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    DeliveryType = table.Column<string>(type: "text", nullable: true),
-                    DeliveryOptions = table.Column<string>(type: "text", nullable: false)
+                    ParentCategoryID = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Deliveries", x => x.ID);
+                    table.PrimaryKey("PK_MerchandiseCategories", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_MerchandiseCategories_MerchandiseCategories_ParentCategoryID",
+                        column: x => x.ParentCategoryID,
+                        principalTable: "MerchandiseCategories",
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -53,27 +56,27 @@ namespace FlowerShop.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MerchandiseCategories",
+                name: "MerchandiseMerchandiseCategory",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(type: "uuid", nullable: false),
-                    ParentCategoryID = table.Column<Guid>(type: "uuid", nullable: false),
-                    MerchandiseID = table.Column<Guid>(type: "uuid", nullable: true)
+                    CategoriesID = table.Column<Guid>(type: "uuid", nullable: false),
+                    MerchandisesID = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MerchandiseCategories", x => x.ID);
+                    table.PrimaryKey("PK_MerchandiseMerchandiseCategory", x => new { x.CategoriesID, x.MerchandisesID });
                     table.ForeignKey(
-                        name: "FK_MerchandiseCategories_MerchandiseCategories_ParentCategoryID",
-                        column: x => x.ParentCategoryID,
+                        name: "FK_MerchandiseMerchandiseCategory_MerchandiseCategories_Catego~",
+                        column: x => x.CategoriesID,
                         principalTable: "MerchandiseCategories",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MerchandiseCategories_Merchandises_MerchandiseID",
-                        column: x => x.MerchandiseID,
+                        name: "FK_MerchandiseMerchandiseCategory_Merchandises_MerchandisesID",
+                        column: x => x.MerchandisesID,
                         principalTable: "Merchandises",
-                        principalColumn: "ID");
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -125,18 +128,11 @@ namespace FlowerShop.Data.Migrations
                 {
                     ID = table.Column<Guid>(type: "uuid", nullable: false),
                     UserID = table.Column<Guid>(type: "uuid", nullable: false),
-                    DeliveryID = table.Column<Guid>(type: "uuid", nullable: false),
                     OrderStatus = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Orders_Deliveries_DeliveryID",
-                        column: x => x.DeliveryID,
-                        principalTable: "Deliveries",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Orders_Users_UserID",
                         column: x => x.UserID,
@@ -146,10 +142,32 @@ namespace FlowerShop.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Deliveries",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    OrderID = table.Column<Guid>(type: "uuid", nullable: false),
+                    DeliveryDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DeliveryType = table.Column<string>(type: "text", nullable: true),
+                    DeliveryOptions = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Deliveries", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Deliveries_Orders_OrderID",
+                        column: x => x.OrderID,
+                        principalTable: "Orders",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Items",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    MerchandiceID = table.Column<Guid>(type: "uuid", nullable: false),
                     MerchandiseID = table.Column<Guid>(type: "uuid", nullable: false),
                     OrderID = table.Column<Guid>(type: "uuid", nullable: false),
                     CountryOfOrigin = table.Column<string>(type: "text", nullable: true),
@@ -173,6 +191,12 @@ namespace FlowerShop.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Deliveries_OrderID",
+                table: "Deliveries",
+                column: "OrderID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Items_MerchandiseID",
                 table: "Items",
                 column: "MerchandiseID");
@@ -183,19 +207,14 @@ namespace FlowerShop.Data.Migrations
                 column: "OrderID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MerchandiseCategories_MerchandiseID",
-                table: "MerchandiseCategories",
-                column: "MerchandiseID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_MerchandiseCategories_ParentCategoryID",
                 table: "MerchandiseCategories",
                 column: "ParentCategoryID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_DeliveryID",
-                table: "Orders",
-                column: "DeliveryID");
+                name: "IX_MerchandiseMerchandiseCategory_MerchandisesID",
+                table: "MerchandiseMerchandiseCategory",
+                column: "MerchandisesID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_UserID",
@@ -217,19 +236,22 @@ namespace FlowerShop.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Deliveries");
+
+            migrationBuilder.DropTable(
                 name: "Items");
 
             migrationBuilder.DropTable(
-                name: "MerchandiseCategories");
+                name: "MerchandiseMerchandiseCategory");
 
             migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Merchandises");
+                name: "MerchandiseCategories");
 
             migrationBuilder.DropTable(
-                name: "Deliveries");
+                name: "Merchandises");
 
             migrationBuilder.DropTable(
                 name: "Users");

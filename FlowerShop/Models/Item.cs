@@ -8,7 +8,9 @@ namespace FlowerShop.Models
         [Key]
         public Guid ID { get; set; }   
            
-        [Required] 
+        [Required]
+        public Guid MerchandiceID { get; set; }
+
         public virtual Merchandise Merchandise { get; set; }
 
         public virtual Order Order { get; set; }

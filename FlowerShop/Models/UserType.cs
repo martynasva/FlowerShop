@@ -11,5 +11,7 @@ namespace FlowerShop.Models
         public string Name { get; set; }
 
         public virtual UserPermission UserPermissions { get; set; }
+
+        public virtual List<User> Users { get; set; }
     }
 }

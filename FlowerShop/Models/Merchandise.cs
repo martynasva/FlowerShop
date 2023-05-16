@@ -15,6 +15,6 @@ namespace FlowerShop.Models
         [Required]
         public decimal Price { get; set; }
 
-        public virtual ICollection<MerchandiseCategory> Categories { get; set; }
+        public virtual List<MerchandiseCategory> Categories { get; set; }
     }
 }

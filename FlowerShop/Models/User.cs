@@ -25,6 +25,9 @@ namespace FlowerShop.Models
         public string Address { get; set; }
 
         [Required]
+        public Guid UserTypeID { get; set; }
         public virtual UserType UserType { get; set; }
+
+        public virtual List<Order> Orders { get; set; }
     }
 }

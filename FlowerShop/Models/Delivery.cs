@@ -7,6 +7,11 @@ namespace FlowerShop.Models
         [Key]
         public Guid ID { get; set; }
 
+        [Required]
+        public Guid OrderID { get; set; }
+
+        public virtual Order Order { get; set; }
+
         public DateTime DeliveryDate { get; set; }
 
         public string? DeliveryType { get; set; }
