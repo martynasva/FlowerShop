@@ -28,6 +28,6 @@ namespace FlowerShop.Models
         public Guid UserTypeID { get; set; }
         public virtual UserType UserType { get; set; }
 
-        public virtual List<Order> Orders { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

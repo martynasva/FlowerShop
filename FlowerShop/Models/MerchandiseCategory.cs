@@ -14,6 +14,6 @@ namespace FlowerShop.Models
         [Required]
         public string Name;
 
-        public virtual List<Merchandise> Merchandises { get; set; }
+        public virtual ICollection<Merchandise> Merchandises { get; set; }
     }
 }

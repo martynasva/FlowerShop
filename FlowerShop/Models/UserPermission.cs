@@ -12,6 +12,6 @@ namespace FlowerShop.Models
 
         public string? PermissionDescription { get; set; }
 
-        public virtual List<UserType> UserTypes { get; set; }
+        public virtual ICollection<UserType> UserTypes { get; set; }
     }
 }
