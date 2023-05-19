@@ -1,5 +1,6 @@
 using FlowerShop.Data;
 using FlowerShop.Interfaces;
+using FlowerShop.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,7 @@ builder.Services.AddDbContext<DataContext>(opt =>
 });
 
 builder.Services.AddScoped<ITestRepository, TestRepository>(); //Temporary service to test database functionality
+builder.Services.AddScoped<IItemsRepository, ItemsRepository>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
