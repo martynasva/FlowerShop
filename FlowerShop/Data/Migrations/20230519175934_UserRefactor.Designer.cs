@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FlowerShop.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230516205602_UserRefactor")]
+    [Migration("20230519175934_UserRefactor")]
     partial class UserRefactor
     {
         /// <inheritdoc />
