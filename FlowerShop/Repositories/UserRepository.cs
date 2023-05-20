@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FlowerShop.Data;
+using FlowerShop.Interfaces;
 using FlowerShop.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace FlowerShop.Repositories
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly DataContext _dataContext;
 
@@ -17,7 +18,7 @@ namespace FlowerShop.Repositories
             _dataContext = context;
         }
 
-        public async Task<IEnumerable<AppUser>> GetUserAsync()
+        public async Task<IEnumerable<AppUser>> GetUsersAsync()
         {
             return await _dataContext.Users.ToListAsync();
         }
@@ -26,7 +27,7 @@ namespace FlowerShop.Repositories
         {
             return await _dataContext.Users.FindAsync(id);
         }
-        public async Task<AppUser> GetUserByUserNameAsync(string username)
+        public async Task<AppUser> GetUserByUsernameAsync(string username)
         {
             return await _dataContext.Users.SingleOrDefaultAsync(x => x.UserName == username);
         }
@@ -34,5 +35,7 @@ namespace FlowerShop.Repositories
         {
             return await _dataContext.SaveChangesAsync() > 0;
         }
+
+
     }
 }

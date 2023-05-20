@@ -52,6 +52,27 @@ namespace FlowerShop.Controllers
                 Token = await _tokenService.CreateToken(user),
             };
         }
+        [HttpPost("login")]
+        public async Task<ActionResult<UserDto>> Login(LoginDTO loginDto)
+        {
+            var user = await _userManager.Users
+            .SingleOrDefaultAsync(x =>x.UserName == loginDto.Username);
+            
+            if(user == null) return Unauthorized("Invalid username");
+            
+            var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
+
+            if(!result) return Unauthorized("Invalid password");
+
+            return new UserDto
+            {
+                Username = user.UserName,
+                Name = user.Name,
+                Surname = user.Surname,
+                Token = await _tokenService.CreateToken(user),
+            };
+
+        }
 
         private async Task<bool> UserExists(string username)
         {
