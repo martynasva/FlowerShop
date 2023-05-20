@@ -32,7 +32,7 @@ namespace FlowerShop.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<OrderDTO>> AddItem([FromBody] CreateOrderDTO createOrderDTO)
+        public async Task<ActionResult<OrderDTO>> AddOrder([FromBody] CreateOrderDTO createOrderDTO)
         {
             var order = CreateOrderDTO.ToOrder(createOrderDTO);
             var createdOrder = await _ordersRepository.AddOrder(order);
@@ -40,7 +40,7 @@ namespace FlowerShop.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<OrderDTO>> UpdateItem(Guid itemId, [FromBody] OrderDTO updatedOrder)
+        public async Task<ActionResult<OrderDTO>> UpdateOrder(Guid itemId, [FromBody] OrderDTO updatedOrder)
         {
             if (itemId != updatedOrder.ID) return BadRequest();
             var order = await _ordersRepository.UpdateOrder(OrderDTO.ToOrder(updatedOrder));
@@ -48,7 +48,7 @@ namespace FlowerShop.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<IEnumerable<OrderDTO>>> DeleteItem(Guid id)
+        public async Task<ActionResult<IEnumerable<OrderDTO>>> DeleteOrder(Guid id)
         {
             var order = await _ordersRepository.RemoveOrder(id);
             return order == null ? NotFound() : Ok(OrderDTO.FromOrder(order));
