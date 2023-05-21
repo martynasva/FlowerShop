@@ -20,7 +20,6 @@ namespace FlowerShop.DTOs
                 Name = merchandise.Name,
                 Description = merchandise.Description,
                 Price = merchandise.Price
-                //Categories = merchandise.Categories
             };
         }
 
