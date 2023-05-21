@@ -9,7 +9,8 @@ namespace FlowerShop.Interfaces
         public Task<MerchandiseCategory?> GetById(Guid id);
 
         public Task<IEnumerable<MerchandiseCategory>> GetBy(
-            string? name = null);
+            string? name = null,
+            Guid? parentCategory = null);
 
         public Task<MerchandiseCategory> AddMerchandiseCategory(MerchandiseCategory merchandiseCategory);
 

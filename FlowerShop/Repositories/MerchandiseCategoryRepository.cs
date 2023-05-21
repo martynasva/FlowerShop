@@ -33,12 +33,14 @@ namespace FlowerShop.Repositories
 
         public async Task<IEnumerable<MerchandiseCategory>> GetAll() => await _dataContext.MerchandiseCategories.ToListAsync();
 
-        public async Task<IEnumerable<MerchandiseCategory>> GetBy(string? name = null)
+        public async Task<IEnumerable<MerchandiseCategory>> GetBy(string? name = null, Guid? parentCategory = null)
         {
             var query = _dataContext.MerchandiseCategories.AsQueryable();
 
-            if(!string.IsNullOrEmpty(name)) query = query.Where(m => m.Name != null && m.Name.ToLower() == name.ToLower());
-
+            if(!string.IsNullOrEmpty(name)) 
+                query = query.Where(m => m.Name != null && m.Name.ToLower() == name.ToLower());
+            if (parentCategory != null)
+                query = query.Where(m => m.ParentCategoryID == parentCategory);
             return await query.ToListAsync();
         }
 

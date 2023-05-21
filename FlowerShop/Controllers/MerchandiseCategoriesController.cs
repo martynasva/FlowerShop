@@ -17,9 +17,10 @@ namespace FlowerShop.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MerchandiseCategoryDTO>>> GetMerchandiseCategories(
-            [FromQuery] string? name = null)
+            [FromQuery] string? name = null,
+            [FromQuery] Guid? parentCategory = null)
         {
-            var merchandiseCategories = (await _merchandiseCategoryRepository.GetBy(name)).Select(m => MerchandiseCategoryDTO.FromMerchandiseCategory(m));
+            var merchandiseCategories = (await _merchandiseCategoryRepository.GetBy(name, parentCategory)).Select(m => MerchandiseCategoryDTO.FromMerchandiseCategory(m));
             return Ok(merchandiseCategories);
         }
 
