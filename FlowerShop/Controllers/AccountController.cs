@@ -53,11 +53,11 @@ namespace FlowerShop.Controllers
             var user = await _userManager.Users
             .SingleOrDefaultAsync(x =>x.UserName == loginDto.Username);
             
-            if(user == null) return Unauthorized("Invalid username");
+            if(user == null) return Unauthorized("Invalid username, or password");
             
             var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
 
-            if(!result) return Unauthorized("Invalid password");
+            if(!result) return Unauthorized("Invalid username, or password");
 
             return new UserDto
             {
@@ -68,7 +68,7 @@ namespace FlowerShop.Controllers
             };
 
         }
-        
+
         private async Task<bool> UserExists(string username)
         {
             return await _userManager.Users.AnyAsync(x=>x.UserName == username.ToLower());

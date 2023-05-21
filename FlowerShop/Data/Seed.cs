@@ -8,7 +8,7 @@ namespace FlowerShop.Data
     {
         public static async Task SeedUsers(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
         {
-            if(await roleManager.Roles.AnyAsync()) return;
+            if(await userManager.Users.AnyAsync()) return;
 
             var roles = new List<AppRole>
             {
