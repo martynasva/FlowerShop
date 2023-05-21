@@ -29,7 +29,7 @@ namespace FlowerShop.Repositories
         {
             var query = _dataContext.Merchandises.AsQueryable();
 
-            if(merchandiseName != null) query = query.Where(m => m.Name == merchandiseName);
+            if(!string.IsNullOrEmpty(merchandiseName)) query = query.Where(m => m.Name != null && m.Name.ToLower() == merchandiseName.ToLower());
             if(price != null) query = query.Where(m => m.Price== price);
 
             return await query.ToListAsync();
