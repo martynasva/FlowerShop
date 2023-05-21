@@ -5,11 +5,11 @@ namespace FlowerShop.DTOs
 {
     public class CreateMerchandiseCategoryDTO
     {
-        public Guid? ParentCategoryId { get; set; }
-
         [Required]
-        [StringLength(maximumLength:50)]
+        [StringLength(maximumLength: 50)]
         public string Name { get; set; }
+
+        public Guid? ParentCategoryId { get; set; }
 
         public static MerchandiseCategory ToMerchandiseCategory(CreateMerchandiseCategoryDTO createMerchandiseCategoryDTO)
         {
@@ -17,7 +17,7 @@ namespace FlowerShop.DTOs
             {
                 ID = Guid.NewGuid(),
                 ParentCategoryID = createMerchandiseCategoryDTO.ParentCategoryId,
-                Name = createMerchandiseCategoryDTO.Name,
+                Name = createMerchandiseCategoryDTO.Name
             };
         }
     }

@@ -38,7 +38,7 @@ namespace FlowerShop.Repositories
             var query = _dataContext.MerchandiseCategories.AsQueryable();
 
             if(!string.IsNullOrEmpty(name)) 
-                query = query.Where(m => m.Name != null && m.Name.ToLower() == name.ToLower());
+                query = query.Where(m => m.Name != null && m.Name.ToLower().Contains(name.ToLower()));
             if (parentCategory != null)
                 query = query.Where(m => m.ParentCategoryID == parentCategory);
             return await query.ToListAsync();
