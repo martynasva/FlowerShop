@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FlowerShop.DTOs;
 using FlowerShop.Extensions;
 using FlowerShop.Interfaces;
@@ -28,6 +24,15 @@ namespace FlowerShop.Controllers
             var users = await _userRepository.GetUsersAsync();
             var userDtos = users.Select(UserDto.FromUser);
             return Ok(userDtos);
+        }
+        [HttpGet("{username}")]
+        public async Task<ActionResult<UserDto>> GetUser(string username)
+        {
+            var user = await _userRepository.GetUserByUsernameAsync(username);
+            if(user == null) return NotFound();
+            
+            var userDto = UserDto.FromUser(user);
+            return Ok(userDto);
         }
 
         [HttpPut]

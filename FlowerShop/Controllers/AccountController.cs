@@ -1,17 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FlowerShop.DTOs;
 using FlowerShop.Interfaces;
 using FlowerShop.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
 
 namespace FlowerShop.Controllers
-{   
+{
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
@@ -73,7 +68,7 @@ namespace FlowerShop.Controllers
             };
 
         }
-
+        
         private async Task<bool> UserExists(string username)
         {
             return await _userManager.Users.AnyAsync(x=>x.UserName == username.ToLower());
