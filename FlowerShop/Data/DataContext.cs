@@ -1,12 +1,15 @@
 ﻿using FlowerShop.Models;
 using Microsoft.AspNetCore.Identity;
-
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+
 
 // Temporary DataContext, we might not need to save everything to database.
 namespace FlowerShop.Data
 {
-    public class DataContext : DbContext
+        public class DataContext : IdentityDbContext<AppUser, AppRole, Guid,
+         IdentityUserClaim<Guid>, AppUserRole, IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, 
+         IdentityUserToken<Guid>> 
     {
         
         public DataContext(DbContextOptions options) : base(options) 
@@ -23,8 +26,21 @@ namespace FlowerShop.Data
         public DbSet<Order> Orders { get; set; }
         //public DbSet<OrderLog> OrderLogs { get; set; } 
         //public DbSet<Payment> Payments { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<UserPermission> UserPermissions { get; set; }
-        public DbSet<UserType> UserTypes { get; set; }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<AppUser>()
+                .HasMany(ur => ur.UserRoles)
+                .WithOne(u => u.User)
+                .HasForeignKey(ur => ur.UserId)
+                .IsRequired();
+
+            builder.Entity<AppRole>()
+                .HasMany(ur => ur.UserRoles)
+                .WithOne(u => u.Role)
+                .HasForeignKey(ur => ur.RoleId)
+                .IsRequired();
+        }
     }
 }
