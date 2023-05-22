@@ -9,7 +9,7 @@ namespace FlowerShop.Models
         public Guid ID { get; set; }
 
         [Required]
-        public virtual User User { get; set; }
+        public virtual AppUser User { get; set; }
 
         [Required]
         public virtual Order Order { get; set; }

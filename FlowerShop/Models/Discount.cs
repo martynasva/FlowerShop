@@ -22,6 +22,6 @@ namespace FlowerShop.Models
 
         public decimal? DiscountAmmount { get; set; }
 
-        public virtual ICollection<User> ApplicableUsers { get; set; }
+        public virtual ICollection<AppUser> ApplicableUsers { get; set; }
     }
 }
