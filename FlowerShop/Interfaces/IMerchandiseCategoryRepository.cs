@@ -19,6 +19,6 @@ namespace FlowerShop.Interfaces
 
         public Task<MerchandiseCategory?> UpdateMerchandiseCategory(MerchandiseCategory merchandiseCategory);
 
-        public Task<List<MerchandiseCategory>> GetChildCategories(Guid id);
+        public Task<IEnumerable<MerchandiseCategory>> GetChildCategories(Guid id);
     }
 }

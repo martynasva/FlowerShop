@@ -11,16 +11,13 @@ namespace FlowerShop.DTOs
 
         public Guid? ParentCategoryID { get; set; }
 
-        public List<MerchandiseCategory> Categories { get; set; }
-
         public static MerchandiseCategoryDTO FromMerchandiseCategory(MerchandiseCategory merchandiseCategory)
         {
             return new MerchandiseCategoryDTO
             {
                 ID = merchandiseCategory.ID,
                 Name = merchandiseCategory.Name,
-                ParentCategoryID = merchandiseCategory.ParentCategoryID,
-                Categories = new List<MerchandiseCategory>()
+                ParentCategoryID = merchandiseCategory.ParentCategoryID
             };
         }
 

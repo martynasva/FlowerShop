@@ -50,7 +50,7 @@ namespace FlowerShop.Repositories
             return await _dataContext.MerchandiseCategories.SingleOrDefaultAsync(m => m.ID == id);
         }
 
-        public async Task<List<MerchandiseCategory>> GetChildCategories(Guid id)
+        public async Task<IEnumerable<MerchandiseCategory>> GetChildCategories(Guid id)
         {
             return await _dataContext.MerchandiseCategories.Where(m => m.ParentCategoryID == id).ToListAsync();
         }

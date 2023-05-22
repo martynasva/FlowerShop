@@ -21,9 +21,7 @@ namespace FlowerShop.Controllers
             [FromQuery] string? name = null,
             [FromQuery] Guid? parentCategory = null)
         {
-            var merchandiseCategories = (await _merchandiseCategoryRepository.GetBy(name, parentCategory)).Select(async m => MerchandiseCategoryDTO.FromMerchandiseCategory(m).
-            Categories = (await _merchandiseCategoryRepository.GetChildCategories(m.ID)));
-
+            var merchandiseCategories = (await _merchandiseCategoryRepository.GetBy(name, parentCategory)).Select(async m => MerchandiseCategoryDTO.FromMerchandiseCategory(m));
             return Ok(merchandiseCategories);
         }
 
@@ -31,10 +29,8 @@ namespace FlowerShop.Controllers
         public async Task<ActionResult<MerchandiseCategoryDTO>> GetMerchandiseCategoryById(Guid id)
         {
             var merchandiseCategory = await _merchandiseCategoryRepository.GetById(id);
-            List<MerchandiseCategory> allCategories = (List<MerchandiseCategory>)await _merchandiseCategoryRepository.GetAll();
 
-            return merchandiseCategory == null ? NotFound() : Ok(MerchandiseCategoryDTO.FromMerchandiseCategory(merchandiseCategory)
-                .Categories = (await _merchandiseCategoryRepository.GetChildCategories(id)));
+            return merchandiseCategory == null ? NotFound() : Ok(MerchandiseCategoryDTO.FromMerchandiseCategory(merchandiseCategory));
         }
 
         [HttpPost]
@@ -61,6 +57,14 @@ namespace FlowerShop.Controllers
             var merchandiseCategory = await _merchandiseCategoryRepository.DeleteMerchandiseCateogry(id);
 
              return merchandiseCategory == null ? NotFound() : Ok(MerchandiseCategoryDTO.FromMerchandiseCategory(merchandiseCategory));
+        }
+
+        [HttpGet("{id}/children")]
+        public async Task<ActionResult<IEnumerable<MerchandiseCategoryDTO>>> GetMerchandiseCategoryChildren(Guid id)
+        {
+            var childCategories = await _merchandiseCategoryRepository.GetChildCategories(id);
+
+            return childCategories == null ? NotFound() : Ok(childCategories.Select(async c => MerchandiseCategoryDTO.FromMerchandiseCategory(c)));
         }
         
     }
