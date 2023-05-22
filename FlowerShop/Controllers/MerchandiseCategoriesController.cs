@@ -21,8 +21,9 @@ namespace FlowerShop.Controllers
             [FromQuery] string? name = null,
             [FromQuery] Guid? parentCategory = null)
         {
-            List<MerchandiseCategory> allCategories = (List<MerchandiseCategory>)await _merchandiseCategoryRepository.GetAll();
-            var merchandiseCategories = (await _merchandiseCategoryRepository.GetBy(name, parentCategory)).Select(m => MerchandiseCategoryDTO.FromMerchandiseCategory(m, allCategories));
+            var merchandiseCategories = (await _merchandiseCategoryRepository.GetBy(name, parentCategory)).Select(async m => MerchandiseCategoryDTO.FromMerchandiseCategory(m));
+            // .Categories = (await _merchandiseCategoryRepository.GetChildCategories(m.ID)));
+
             return Ok(merchandiseCategories);
         }
 
@@ -32,16 +33,15 @@ namespace FlowerShop.Controllers
             var merchandiseCategory = await _merchandiseCategoryRepository.GetById(id);
             List<MerchandiseCategory> allCategories = (List<MerchandiseCategory>)await _merchandiseCategoryRepository.GetAll();
 
-            return merchandiseCategory == null ? NotFound() : Ok(MerchandiseCategoryDTO.FromMerchandiseCategory(merchandiseCategory, allCategories));
+            return merchandiseCategory == null ? NotFound() : Ok(MerchandiseCategoryDTO.FromMerchandiseCategory(merchandiseCategory).Categories = (await _merchandiseCategoryRepository.GetChildCategories(id)));
         }
 
         [HttpPost]
         public async Task<ActionResult<MerchandiseCategoryDTO>> AddMerchandiseCategory([FromBody] CreateMerchandiseCategoryDTO createMerchandiseCategory)
         {
             var merchandiseCategory = CreateMerchandiseCategoryDTO.ToMerchandiseCategory(createMerchandiseCategory);
-            List<MerchandiseCategory> allCategories = (List<MerchandiseCategory>)await _merchandiseCategoryRepository.GetAll();
             var created = await _merchandiseCategoryRepository.AddMerchandiseCategory(merchandiseCategory);
-            return Ok(MerchandiseCategoryDTO.FromMerchandiseCategory(created, allCategories));
+            return Ok(MerchandiseCategoryDTO.FromMerchandiseCategory(created));
         }
 
         [HttpPut("{id}")]
@@ -50,19 +50,16 @@ namespace FlowerShop.Controllers
             if (id != updatedMerchandiseCategory.ID)
                 return BadRequest();
 
-            List<MerchandiseCategory> allCategories = (List<MerchandiseCategory>)await _merchandiseCategoryRepository.GetAll();
             var merchandiseCategory = await _merchandiseCategoryRepository.UpdateMerchandiseCategory(MerchandiseCategoryDTO.ToMerchandiseCategory(updatedMerchandiseCategory));
-            return merchandiseCategory == null ? NotFound() : Ok(MerchandiseCategoryDTO.FromMerchandiseCategory(merchandiseCategory, allCategories));
+            return merchandiseCategory == null ? NotFound() : Ok(MerchandiseCategoryDTO.FromMerchandiseCategory(merchandiseCategory));
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<IEnumerable<MerchandiseCategoryDTO>>> DeleteMerchandiseCategory(Guid id)
         {
             var merchandiseCategory = await _merchandiseCategoryRepository.DeleteMerchandiseCateogry(id);
-            List<MerchandiseCategory> allCategories = (List<MerchandiseCategory>)await _merchandiseCategoryRepository.GetAll();
 
-
-             return merchandiseCategory == null ? NotFound() : Ok(MerchandiseCategoryDTO.FromMerchandiseCategory(merchandiseCategory, allCategories));
+             return merchandiseCategory == null ? NotFound() : Ok(MerchandiseCategoryDTO.FromMerchandiseCategory(merchandiseCategory));
         }
         
     }

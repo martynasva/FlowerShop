@@ -33,6 +33,7 @@ namespace FlowerShop.Repositories
 
         public async Task<IEnumerable<MerchandiseCategory>> GetAll() => await _dataContext.MerchandiseCategories.ToListAsync();
 
+
         public async Task<IEnumerable<MerchandiseCategory>> GetBy(string? name = null, Guid? parentCategory = null)
         {
             var query = _dataContext.MerchandiseCategories.AsQueryable();
@@ -47,6 +48,11 @@ namespace FlowerShop.Repositories
         public async Task<MerchandiseCategory?> GetById(Guid id)
         {
             return await _dataContext.MerchandiseCategories.SingleOrDefaultAsync(m => m.ID == id);
+        }
+
+        public async Task<List<MerchandiseCategory>> GetChildCategories(Guid id)
+        {
+            return await _dataContext.MerchandiseCategories.Where(m => m.ParentCategoryID == id).ToListAsync();
         }
 
         public async Task<MerchandiseCategory?> UpdateMerchandiseCategory(MerchandiseCategory merchandiseCategory)

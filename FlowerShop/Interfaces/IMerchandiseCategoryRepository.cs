@@ -1,4 +1,5 @@
-﻿using FlowerShop.Models;
+﻿using FlowerShop.DTOs;
+using FlowerShop.Models;
 
 namespace FlowerShop.Interfaces
 {
@@ -17,5 +18,7 @@ namespace FlowerShop.Interfaces
         public Task<MerchandiseCategory?> DeleteMerchandiseCateogry(Guid id);
 
         public Task<MerchandiseCategory?> UpdateMerchandiseCategory(MerchandiseCategory merchandiseCategory);
+
+        public Task<List<MerchandiseCategory>> GetChildCategories(Guid id);
     }
 }
