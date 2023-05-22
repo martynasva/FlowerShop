@@ -21,8 +21,8 @@ namespace FlowerShop.Controllers
             [FromQuery] string? name = null,
             [FromQuery] Guid? parentCategory = null)
         {
-            var merchandiseCategories = (await _merchandiseCategoryRepository.GetBy(name, parentCategory)).Select(async m => MerchandiseCategoryDTO.FromMerchandiseCategory(m));
-            // .Categories = (await _merchandiseCategoryRepository.GetChildCategories(m.ID)));
+            var merchandiseCategories = (await _merchandiseCategoryRepository.GetBy(name, parentCategory)).Select(async m => MerchandiseCategoryDTO.FromMerchandiseCategory(m).
+            Categories = (await _merchandiseCategoryRepository.GetChildCategories(m.ID)));
 
             return Ok(merchandiseCategories);
         }
@@ -33,7 +33,8 @@ namespace FlowerShop.Controllers
             var merchandiseCategory = await _merchandiseCategoryRepository.GetById(id);
             List<MerchandiseCategory> allCategories = (List<MerchandiseCategory>)await _merchandiseCategoryRepository.GetAll();
 
-            return merchandiseCategory == null ? NotFound() : Ok(MerchandiseCategoryDTO.FromMerchandiseCategory(merchandiseCategory).Categories = (await _merchandiseCategoryRepository.GetChildCategories(id)));
+            return merchandiseCategory == null ? NotFound() : Ok(MerchandiseCategoryDTO.FromMerchandiseCategory(merchandiseCategory)
+                .Categories = (await _merchandiseCategoryRepository.GetChildCategories(id)));
         }
 
         [HttpPost]
