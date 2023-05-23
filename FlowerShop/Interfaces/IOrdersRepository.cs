@@ -10,7 +10,7 @@ namespace FlowerShop.Interfaces
         public Task<Order?> GetById(Guid id);
 
         public Task<IEnumerable<Order>> GetBy(
-            Guid? userID = null,
+            string? userName = null,
             string? status = null);
 
         public Task<Order> AddOrder(Order order);
@@ -18,5 +18,7 @@ namespace FlowerShop.Interfaces
         public Task<Order?> RemoveOrder(Guid orderID);
 
         public Task<Order?> UpdateOrder(Order updatedOrder);
+
+        public Task<Order?> AddItemToOrder(Item item, Order orderToUpdate);
     }
 }

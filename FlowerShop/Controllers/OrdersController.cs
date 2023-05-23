@@ -9,18 +9,20 @@ namespace FlowerShop.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IOrdersRepository _ordersRepository;
+        private readonly IItemsRepository _itemsRepository;
 
-        public OrdersController(IOrdersRepository ordersRepository)
+        public OrdersController(IOrdersRepository ordersRepository, IItemsRepository itemsRepository)
         {
             _ordersRepository = ordersRepository;
+            _itemsRepository = itemsRepository;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderDTO>>> GetOrders(
-            [FromQuery] Guid? userId = null,
+            [FromQuery] string? userName = null,
             [FromQuery] string? status = null)
         {
-            var orders = (await _ordersRepository.GetBy(userId, status)).Select(i => OrderDTO.FromOrder(i));
+            var orders = (await _ordersRepository.GetBy(userName, status)).Select(i => OrderDTO.FromOrder(i));
             return Ok(orders);
         }
 
@@ -40,11 +42,31 @@ namespace FlowerShop.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<OrderDTO>> UpdateOrder(Guid itemId, [FromBody] OrderDTO updatedOrder)
+        public async Task<ActionResult<OrderDTO>> UpdateOrder(Guid orderId, [FromBody] OrderDTO updatedOrder)
         {
-            if (itemId != updatedOrder.ID) return BadRequest();
+            if (orderId != updatedOrder.ID) return BadRequest();
             var order = await _ordersRepository.UpdateOrder(OrderDTO.ToOrder(updatedOrder));
             return order == null ? NotFound() : Ok(OrderDTO.FromOrder(order));
+        }
+
+        [HttpPut("addItem/{itemId}/{orderId}")]
+        public async Task<ActionResult<OrderDTO>> AddItemToCart(Guid itemId, Guid orderId)
+        {
+            var order = await _ordersRepository.GetById(orderId);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            var item = await _itemsRepository.GetById(itemId);
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+
+            var orderUpdate = await _ordersRepository.AddItemToOrder(item, order);
+            return orderUpdate == null ? NotFound() : Ok(OrderDTO.FromOrder(orderUpdate));
         }
 
         [HttpDelete("{id}")]

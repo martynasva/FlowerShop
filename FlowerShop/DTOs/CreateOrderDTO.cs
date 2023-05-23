@@ -18,6 +18,7 @@ namespace FlowerShop.DTOs
             {
                 ID = Guid.NewGuid(),
                 OrderStatus = (OrderStatus)Enum.Parse(typeof(OrderStatus), createOrderDTO.OrderStatusString),
+                UserID = createOrderDTO.UserID,
             };
         }
     }

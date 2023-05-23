@@ -23,12 +23,12 @@ namespace FlowerShop.Repositories
         }
 
         public async Task<IEnumerable<Order>> GetBy(
-            Guid? userID = null,
+            string? userName = null,
             string? status = null)
         {
             var query = _dataContext.Orders.AsQueryable();
 
-            if (userID != null) query = query.Where(i => i.UserID == userID);
+            if (userName != null) query = query.Where(i => i.User.Name == userName);
             if (!string.IsNullOrEmpty(status)) query = query.Where(i => i.OrderStatus != null && i.OrderStatus.ToString().ToLower() == status.ToLower());
 
             return await query.ToListAsync();
@@ -57,6 +57,16 @@ namespace FlowerShop.Repositories
             _dataContext.Entry(order).CurrentValues.SetValues(updatedOrder);
             await _dataContext.SaveChangesAsync();
             return updatedOrder;
+        }
+
+        public async Task<Order?> AddItemToOrder(Item item, Order orderToUpdate)
+        {
+            var order = await GetById(orderToUpdate.ID);
+            if (order == null) return null;
+            orderToUpdate.Items.Add(item);
+            _dataContext.Entry(order).CurrentValues.SetValues(orderToUpdate);
+            await _dataContext.SaveChangesAsync();
+            return orderToUpdate;
         }
     }
 }
