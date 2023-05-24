@@ -22,6 +22,8 @@ builder.Services.AddDbContext<DataContext>(opt =>
 builder.Services.AddScoped<ITestRepository, TestRepository>(); //Temporary service to test database functionality
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IItemsRepository, ItemsRepository>();
+builder.Services.AddScoped<IMerchandiseRepository, MerchandiseRepository>();    
+builder.Services.AddScoped<IMerchandiseCategoryRepository, MerchandiseCategoryRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
