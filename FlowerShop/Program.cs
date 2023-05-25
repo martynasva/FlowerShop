@@ -23,6 +23,8 @@ builder.Services.AddScoped<ITestRepository, TestRepository>(); //Temporary servi
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IItemsRepository, ItemsRepository>();
 builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
+builder.Services.AddScoped<IMerchandiseRepository, MerchandiseRepository>();    
+builder.Services.AddScoped<IMerchandiseCategoryRepository, MerchandiseCategoryRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
