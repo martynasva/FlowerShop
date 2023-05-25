@@ -63,7 +63,11 @@ namespace FlowerShop.Repositories
         {
             var order = await GetById(orderToUpdate.ID);
             if (order == null) return null;
-            orderToUpdate.Items.Add(item);
+            if(order.Items == null)
+            {
+                order.Items = new List<Item>();
+            }
+            order.Items.Add(item);
             _dataContext.Entry(order).CurrentValues.SetValues(orderToUpdate);
             await _dataContext.SaveChangesAsync();
             return orderToUpdate;
