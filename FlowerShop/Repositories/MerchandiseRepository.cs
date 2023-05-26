@@ -57,9 +57,11 @@ namespace FlowerShop.Repositories
             var merchandise = await GetById(updatedMerchandise.ID);
             if (merchandise == null)
                 return null;
+
+            _dataContext.Entry(merchandise).OriginalValues["Version"] = updatedMerchandise.Version;
             _dataContext.Entry(merchandise).CurrentValues.SetValues(updatedMerchandise);
             await _dataContext.SaveChangesAsync();
-            return updatedMerchandise;
+            return merchandise;
         }
     }
 }

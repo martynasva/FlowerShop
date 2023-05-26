@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using FlowerShop.DTOs;
 using Microsoft.AspNetCore.Authorization;
+using FlowerShop.Models;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace FlowerShop.Controllers
 {
@@ -40,13 +43,25 @@ namespace FlowerShop.Controllers
         }
 
         [Authorize(Policy = "RequireAdminRole")]
-        [HttpPut("{id}")]
-        public async Task<ActionResult<MerchandiseDTO>> UpdateMerchandise(Guid id, [FromBody] MerchandiseDTO updateMerchandise)
+        [HttpPut("{id}/{version}")]
+        public async Task<ActionResult<MerchandiseDTO>> UpdateMerchandise([FromRoute] Guid id, [FromRoute] uint version, [FromBody] MerchandiseDTO updateMerchandise)
         {
-            if (id != updateMerchandise.Id)
+            if (id != updateMerchandise.Id || version != updateMerchandise.Version)
                 return BadRequest();
-            var merchandise = await _merchandiseRepository.UpdateMerchandise(MerchandiseDTO.ToMerchandise(updateMerchandise));
-            return merchandise == null ? NotFound() : Ok(MerchandiseDTO.FromMerchandise(merchandise));
+            try
+            {
+                var merchandise = await _merchandiseRepository.UpdateMerchandise(MerchandiseDTO.ToMerchandise(updateMerchandise));
+                return merchandise == null ? NotFound() : Ok(MerchandiseDTO.FromMerchandise(merchandise));
+            }
+            catch(DbUpdateConcurrencyException)
+            {
+                var databaseEntry = await _merchandiseRepository.GetById(id);
+                if(databaseEntry == null)
+                {
+                    return Conflict("Unable to save changes. The Merchandise was deleted by another user.");
+                }
+                return Conflict(MerchandiseDTO.FromMerchandise(databaseEntry));
+            }
         }
 
         [Authorize(Policy = "RequireAdminRole")]
