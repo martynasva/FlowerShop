@@ -1,13 +1,11 @@
 ﻿using FlowerShop.DTOs;
 using FlowerShop.Interfaces;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlowerShop.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ItemsController : ControllerBase
+    public class ItemsController : BaseApiController
     {
         private readonly IItemsRepository _itemsRepository;
 
@@ -33,7 +31,8 @@ namespace FlowerShop.Controllers
             var item = await _itemsRepository.GetById(id);
             return item == null ? NotFound() : Ok(ItemDTO.FromItem(item)); 
         }
-
+        
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpPost]
         public async Task<ActionResult<ItemDTO>> AddItem([FromBody] CreateItemDTO createItemDTO)
         {
@@ -42,6 +41,7 @@ namespace FlowerShop.Controllers
             return Ok(ItemDTO.FromItem(createdItem));
         }
 
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpPut("{id}")]
         public async Task<ActionResult<ItemDTO>> UpdateItem(Guid itemId ,[FromBody] ItemDTO updatedItem)
         {
@@ -50,6 +50,7 @@ namespace FlowerShop.Controllers
             return item == null ? NotFound() : Ok(ItemDTO.FromItem(item));
         }
 
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<IEnumerable<ItemDTO>>> DeleteItem(Guid id)
         {

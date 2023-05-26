@@ -1,5 +1,4 @@
 ﻿using FlowerShop.Models;
-using FlowerShop.Repositories;
 
 namespace FlowerShop.DTOs
 {

@@ -1,15 +1,11 @@
 ﻿using FlowerShop.Interfaces;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using FlowerShop.DTOs;
-using FlowerShop.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FlowerShop.Controllers
 {
-    [Microsoft.AspNetCore.Mvc.Route("api/[controller]")]
-    [ApiController]
-    public class MerchandisesController : ControllerBase
+    public class MerchandisesController : BaseApiController
     {
         private readonly IMerchandiseRepository _merchandiseRepository;
 
@@ -33,7 +29,8 @@ namespace FlowerShop.Controllers
             var merchandise = await _merchandiseRepository.GetById(id);
             return merchandise == null ? NotFound() : Ok(MerchandiseDTO.FromMerchandise(merchandise));
         }
-
+        
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpPost]
         public async Task<ActionResult<MerchandiseDTO>> AddMerchandise([FromBody] CreateMerchandiseDTO createMerchandiseDTO)
         {
@@ -42,6 +39,7 @@ namespace FlowerShop.Controllers
             return Ok(MerchandiseDTO.FromMerchandise(created));
         }
 
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpPut("{id}")]
         public async Task<ActionResult<MerchandiseDTO>> UpdateMerchandise(Guid id, [FromBody] MerchandiseDTO updateMerchandise)
         {
@@ -51,6 +49,7 @@ namespace FlowerShop.Controllers
             return merchandise == null ? NotFound() : Ok(MerchandiseDTO.FromMerchandise(merchandise));
         }
 
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<IEnumerable<MerchandiseDTO>>> DeleteMerchandise(Guid id)
         {
