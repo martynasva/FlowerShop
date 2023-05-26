@@ -1,13 +1,10 @@
 using FlowerShop.Data;
 using FlowerShop.Extensions;
-using FlowerShop.Interfaces;
+using FlowerShop.Middleware;
 using FlowerShop.Models;
-using FlowerShop.Repositories;
-using FlowerShop.Services;
 using Microsoft.AspNetCore.Identity;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +23,8 @@ builder.Services.AddDbContext<DataContext>(opt =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
