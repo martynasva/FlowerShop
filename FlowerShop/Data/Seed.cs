@@ -25,11 +25,13 @@ namespace FlowerShop.Data
 
             var admin = new AppUser
             {
-                UserName = "admin"
+                UserName = "admin",
+                Name = "admin",
+                Surname = "admin"
             };
 
             await userManager.CreateAsync(admin, "Pa$$w0rd");
-            await userManager.AddToRolesAsync(admin, new[] {"Admin", "Moderator", "Member"});
+            await userManager.AddToRolesAsync(admin, new[] {"Admin", "Moderator", "Member", "User"});
         }
     }
 }
