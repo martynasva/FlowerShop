@@ -6,10 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FlowerShop.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     [Authorize]
-    public class UserController : ControllerBase
+    public class UserController : BaseApiController
     {
         private readonly IUserRepository _userRepository;
 
@@ -50,5 +48,6 @@ namespace FlowerShop.Controllers
 
             return BadRequest("Failed to update user");
         }
+
     }
 }

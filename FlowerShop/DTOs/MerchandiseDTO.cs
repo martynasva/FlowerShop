@@ -12,6 +12,8 @@ namespace FlowerShop.DTOs
 
         public decimal Price { get; set; }
 
+        public uint Version { get; set; }
+
         public static MerchandiseDTO FromMerchandise(Merchandise merchandise)
         {
             return new MerchandiseDTO
@@ -19,7 +21,8 @@ namespace FlowerShop.DTOs
                 Id = merchandise.ID,
                 Name = merchandise.Name,
                 Description = merchandise.Description,
-                Price = merchandise.Price
+                Price = merchandise.Price,
+                Version = merchandise.Version
             };
         }
 
@@ -30,7 +33,8 @@ namespace FlowerShop.DTOs
                 ID = merchandiseDTO.Id,
                 Name = merchandiseDTO.Name,
                 Description = merchandiseDTO.Description,
-                Price = merchandiseDTO.Price
+                Price = merchandiseDTO.Price,
+                Version = merchandiseDTO.Version
             };
         }
 

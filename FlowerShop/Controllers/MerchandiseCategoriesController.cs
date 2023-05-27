@@ -1,13 +1,11 @@
 ﻿using FlowerShop.DTOs;
 using FlowerShop.Interfaces;
-using FlowerShop.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlowerShop.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class MerchandiseCategoriesController : ControllerBase
+    public class MerchandiseCategoriesController : BaseApiController
     {
         private readonly IMerchandiseCategoryRepository _merchandiseCategoryRepository;
 
@@ -42,6 +40,7 @@ namespace FlowerShop.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Policy = "RequireAdminRole")]
         public async Task<ActionResult<MerchandiseCategoryDTO>> UpdateMerchandiseCategory(Guid id, [FromBody] MerchandiseCategoryDTO updatedMerchandiseCategory)
         {
             if (id != updatedMerchandiseCategory.ID)
@@ -51,6 +50,7 @@ namespace FlowerShop.Controllers
             return merchandiseCategory == null ? NotFound() : Ok(MerchandiseCategoryDTO.FromMerchandiseCategory(merchandiseCategory));
         }
 
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<IEnumerable<MerchandiseCategoryDTO>>> DeleteMerchandiseCategory(Guid id)
         {
@@ -59,6 +59,7 @@ namespace FlowerShop.Controllers
              return merchandiseCategory == null ? NotFound() : Ok(MerchandiseCategoryDTO.FromMerchandiseCategory(merchandiseCategory));
         }
 
+        
         [HttpGet("{id}/children")]
         public async Task<ActionResult<IEnumerable<MerchandiseCategoryDTO>>> GetMerchandiseCategoryChildren(Guid id)
         {

@@ -1,53 +1,28 @@
 using FlowerShop.Data;
 using FlowerShop.Extensions;
-using FlowerShop.Interfaces;
+using FlowerShop.Middleware;
 using FlowerShop.Models;
-using FlowerShop.Repositories;
-using FlowerShop.Services;
 using Microsoft.AspNetCore.Identity;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddIdentityServices(builder.Configuration);
+builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddDbContext<DataContext>(opt => 
 {
     opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddIdentityServices(builder.Configuration);
-builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo {Title = "dotnetClaimAuthorization", Version = "v1"});
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme{
-        In=ParameterLocation.Header,
-        Description="Token",
-        Name="Authorization",
-        Type=SecuritySchemeType.Http,
-        BearerFormat="JWT",
-        Scheme="bearer"
-    });
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement{
-        {
-            new OpenApiSecurityScheme{
-                Reference= new OpenApiReference{
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
-                }
-            },
-            new string[]{} 
-        }
-    });
-});
+
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

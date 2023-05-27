@@ -7,9 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FlowerShop.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AccountController : ControllerBase
+    public class AccountController : BaseApiController
     {
         private readonly ITokenService _tokenService;
         private readonly UserManager<AppUser> _userManager;
@@ -35,7 +33,7 @@ namespace FlowerShop.Controllers
             
             if(!result.Succeeded) return BadRequest(result.Errors);
 
-            var roleResult = await _userManager.AddToRoleAsync(user, "Member");
+            var roleResult = await _userManager.AddToRoleAsync(user, "User");
             
             if(!roleResult.Succeeded) return BadRequest(result.Errors);
 
