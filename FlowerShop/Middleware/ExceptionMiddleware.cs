@@ -10,10 +10,10 @@ namespace FlowerShop.Middleware
         private readonly IHostEnvironment _env;
 
         public ExceptionMiddleware(RequestDelegate next,
-        ILogger<ExceptionMiddleware> logger, IHostEnvironment env)
+            ILogger<ExceptionMiddleware> logger, IHostEnvironment env)
         {
             _next = next;
-            _logger = logger;
+            _logger = logger; //susikurti
             _env = env;
         }
 
@@ -41,5 +41,6 @@ namespace FlowerShop.Middleware
             }
 
         }
+
     }
 }

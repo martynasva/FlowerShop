@@ -5,6 +5,8 @@ using FlowerShop.Models;
 using Microsoft.AspNetCore.Identity;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +26,6 @@ builder.Services.AddDbContext<DataContext>(opt =>
 
 var app = builder.Build();
 
-app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -33,10 +34,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "dotnetClaimAuthorization v1"));
 }
 
-app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
+
+           
+app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<LogRequestMiddleware>();
+
+app.UseHttpsRedirection();
+
+
 
 app.MapControllers();
 
