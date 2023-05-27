@@ -11,7 +11,6 @@ namespace FlowerShop.Interceptors
 {
     public class UpdateOrderInterceptor : SaveChangesInterceptor
     {
-        private bool isInterceptionDisabled = false;
         private readonly IServiceProvider _serviceProvider;
 
         public UpdateOrderInterceptor(IServiceProvider serviceProvider)
@@ -21,11 +20,6 @@ namespace FlowerShop.Interceptors
 
         public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
         {
-            if (isInterceptionDisabled)
-            {
-                return base.SavingChangesAsync(eventData, result, cancellationToken);
-            }
-
             DbContext? dbContext = eventData.Context;
 
             if (dbContext == null) 
@@ -34,33 +28,28 @@ namespace FlowerShop.Interceptors
             }
 
             var entries = dbContext.ChangeTracker.Entries<Order>();
+            var separateScope = _serviceProvider.CreateScope();
+            var separateServiceProvider = separateScope.ServiceProvider;
+            var orderLogsRepository = separateServiceProvider.GetRequiredService<IOrderLogsRepository>();
 
-            foreach(EntityEntry<Order> entityEntry in entries)
+            OrderLog orderLog = new OrderLog();
+            foreach (EntityEntry<Order> entityEntry in entries)
             {
                 switch(entityEntry.State)
                 {
-                    case EntityState.Added:
-                        Console.WriteLine("AddedOrder");
-                        break;
                     case EntityState.Deleted:
-                        Console.WriteLine("DeletedOrder");
+                        orderLog.Timestamp = DateTime.UtcNow;
+                        orderLog.LogText = "Order Deleted";
+
+                        orderLog.OrderID = entityEntry.Entity.ID;
+
+                        orderLogsRepository.AddOrderLog(orderLog);
                         break;
                     case EntityState.Modified:
-                        var separateScope = _serviceProvider.CreateScope();
-                        var separateServiceProvider = separateScope.ServiceProvider;
-                        var orderLogsRepository = separateServiceProvider.GetRequiredService<IOrderLogsRepository>();
-
-                        string newValues = entityEntry.CurrentValues.ToString();
-                        string originalValues = entityEntry.OriginalValues.ToString();
-                        OrderLog orderLog = new OrderLog();
-
                         orderLog.Timestamp = DateTime.UtcNow;
                         orderLog.LogText = GetLogText(entityEntry);
 
-                        Guid orderId = entityEntry.Entity.ID;
-                        orderLog.OrderID = orderId;
-                        Console.WriteLine(orderLog.OrderID);
-
+                        orderLog.OrderID = entityEntry.Entity.ID;
 
                         orderLogsRepository.AddOrderLog(orderLog);
                         break;
@@ -92,16 +81,6 @@ namespace FlowerShop.Interceptors
             logText = logText.TrimEnd(',', ' ');
 
             return logText;
-        }
-
-        public override int SavedChanges(SaveChangesCompletedEventData eventData, int result)
-        {
-            if (isInterceptionDisabled)
-            {
-                return result;
-            }
-
-            return base.SavedChanges(eventData, result);
         }
     }
 }
