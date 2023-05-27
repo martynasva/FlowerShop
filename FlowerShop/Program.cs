@@ -19,13 +19,6 @@ builder.Services.AddDbContext<DataContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddScoped<ITestRepository, TestRepository>(); //Temporary service to test database functionality
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IItemsRepository, ItemsRepository>();
-builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
-builder.Services.AddScoped<IMerchandiseRepository, MerchandiseRepository>();    
-builder.Services.AddScoped<IMerchandiseCategoryRepository, MerchandiseCategoryRepository>();
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
