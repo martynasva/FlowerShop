@@ -11,7 +11,7 @@ namespace FlowerShop.Controllers
     {
         private readonly IUserRepository _userRepository;
 
-         public UserController(IUserRepository userRepository)
+        public UserController(IUserRepository userRepository)
         {
             _userRepository = userRepository;        
         }
