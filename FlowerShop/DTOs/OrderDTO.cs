@@ -20,8 +20,6 @@ namespace FlowerShop.DTOs
             {
                 ID = order.ID,
                 UserID = order.UserID,
-/*                DeliveryID = order.Delivery.ID,
-                ItemIDs = order.Items.Select(item => item.ID).ToArray(),*/
                 OrderStatusString = order.OrderStatus.ToString()
             };
         }
