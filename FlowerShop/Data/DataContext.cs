@@ -24,7 +24,7 @@ namespace FlowerShop.Data
         public DbSet<Merchandise> Merchandises { get; set; }
         public DbSet<MerchandiseCategory> MerchandiseCategories { get; set; }
         public DbSet<Order> Orders { get; set; }
-        //public DbSet<OrderLog> OrderLogs { get; set; } 
+        public DbSet<OrderLog> OrderLogs { get; set; }
         //public DbSet<Payment> Payments { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
