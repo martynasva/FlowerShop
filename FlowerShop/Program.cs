@@ -1,5 +1,6 @@
 using FlowerShop.Data;
 using FlowerShop.Extensions;
+using FlowerShop.Interceptors;
 using FlowerShop.Middleware;
 using FlowerShop.Models;
 using Microsoft.AspNetCore.Identity;
@@ -15,9 +16,23 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddApplicationServices(builder.Configuration);
-builder.Services.AddDbContext<DataContext>(opt => 
+builder.Services.AddSingleton<UpdateOrderInterceptor>();
+builder.Services.AddDbContext<DataContext>((sp, opt) => 
 {
-    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    var orderInterceptor = sp.GetService<UpdateOrderInterceptor>();
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")).AddInterceptors(orderInterceptor);
+});
+
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:3000")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                      });
 });
 
 
@@ -43,7 +58,7 @@ app.UseMiddleware<LogRequestMiddleware>();
 
 app.UseHttpsRedirection();
 
-
+app.UseCors(MyAllowSpecificOrigins);
 
 app.MapControllers();
 

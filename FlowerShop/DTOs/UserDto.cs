@@ -8,6 +8,7 @@ namespace FlowerShop.DTOs
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Token { get; set; }
+        public Guid Id { get; set; }
 
         public static UserDto FromUser(AppUser user)
         {
@@ -15,7 +16,8 @@ namespace FlowerShop.DTOs
             {
                 Username = user.UserName,
                 Name = user.Name,
-                Surname = user.Surname,   
+                Surname = user.Surname,
+                Id = user.Id
             };
         }
     }

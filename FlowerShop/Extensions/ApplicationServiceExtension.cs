@@ -51,6 +51,8 @@ namespace FlowerShop.Extensions
             services.AddScoped<IMerchandiseRepository, MerchandiseRepository>();
             services.AddScoped<IMerchandiseCategoryRepository, MerchandiseCategoryRepository>();
             services.Configure<MiddlewareOptions>(config.GetSection("MiddlewareOptions"));
+            services.AddScoped<IOrdersRepository, OrdersRepository>();
+            services.AddScoped<IOrderLogsRepository, OrderLogsRepository>();
 
             return services;
         }

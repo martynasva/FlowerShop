@@ -8,7 +8,7 @@ namespace FlowerShop.Models
         public Guid ID { get; set; }
 
         [Required]
-        public Order Order { get; set; }
+        public Guid OrderID { get; set; }
 
         public string? LogText { get; set; }
 
