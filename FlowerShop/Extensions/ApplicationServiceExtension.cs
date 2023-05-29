@@ -1,7 +1,9 @@
 using FlowerShop.Interfaces;
+using FlowerShop.Middleware;
 using FlowerShop.Repositories;
 using FlowerShop.Services;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 namespace FlowerShop.Extensions
 {
@@ -10,6 +12,7 @@ namespace FlowerShop.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services,
             IConfiguration config)
         {
+
             services.AddCors();
             services.AddScoped<ITokenService, TokenService>();
             services.AddEndpointsApiExplorer();
@@ -47,6 +50,7 @@ namespace FlowerShop.Extensions
             services.AddScoped<IItemsRepository, ItemsRepository>();
             services.AddScoped<IMerchandiseRepository, MerchandiseRepository>();
             services.AddScoped<IMerchandiseCategoryRepository, MerchandiseCategoryRepository>();
+            services.Configure<MiddlewareOptions>(config.GetSection("MiddlewareOptions"));
             services.AddScoped<IOrdersRepository, OrdersRepository>();
             services.AddScoped<IOrderLogsRepository, OrderLogsRepository>();
 
