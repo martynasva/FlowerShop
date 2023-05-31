@@ -14,18 +14,18 @@ namespace FlowerShop.Data.Migrations
                 name: "FK_OrderLogs_Orders_OrderID",
                 table: "OrderLogs");
 
-            migrationBuilder.DropIndex(
+           /* migrationBuilder.DropIndex(
                 name: "IX_OrderLogs_OrderID",
-                table: "OrderLogs");
+                table: "OrderLogs");*/
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateIndex(
+           /* migrationBuilder.CreateIndex(
                 name: "IX_OrderLogs_OrderID",
                 table: "OrderLogs",
-                column: "OrderID");
+                column: "OrderID");*/
 
             migrationBuilder.AddForeignKey(
                 name: "FK_OrderLogs_Orders_OrderID",
