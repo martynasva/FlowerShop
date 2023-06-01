@@ -20,5 +20,7 @@ namespace FlowerShop.Interfaces
 
         public Task<Item?> UpdateItem(Item updatedItem);
 
+        public Task<Item?> AddItemToOrder(Item item, Order orderToUpdate);
+
     }
 }

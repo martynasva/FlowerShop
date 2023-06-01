@@ -9,12 +9,10 @@ namespace FlowerShop.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IOrdersRepository _ordersRepository;
-        private readonly IItemsRepository _itemsRepository;
 
-        public OrdersController(IOrdersRepository ordersRepository, IItemsRepository itemsRepository)
+        public OrdersController(IOrdersRepository ordersRepository)
         {
             _ordersRepository = ordersRepository;
-            _itemsRepository = itemsRepository;
         }
 
         [HttpGet]
@@ -47,26 +45,6 @@ namespace FlowerShop.Controllers
             if (orderId != updatedOrder.ID) return BadRequest();
             var order = await _ordersRepository.UpdateOrder(OrderDTO.ToOrder(updatedOrder));
             return order == null ? NotFound() : Ok(OrderDTO.FromOrder(order));
-        }
-
-        [HttpPut("addItem/{itemId}/{orderId}")]
-        public async Task<ActionResult<OrderDTO>> AddItemToCart(Guid itemId, Guid orderId)
-        {
-            var order = await _ordersRepository.GetById(orderId);
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            var item = await _itemsRepository.GetById(itemId);
-            if (item == null)
-            {
-                return NotFound();
-            }
-
-
-            var orderUpdate = await _ordersRepository.AddItemToOrder(item, order);
-            return orderUpdate == null ? NotFound() : Ok(OrderDTO.FromOrder(orderUpdate));
         }
 
         [HttpDelete("{id}")]

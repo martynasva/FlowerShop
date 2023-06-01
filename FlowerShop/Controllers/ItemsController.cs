@@ -1,5 +1,6 @@
 ﻿using FlowerShop.DTOs;
 using FlowerShop.Interfaces;
+using FlowerShop.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,10 +9,12 @@ namespace FlowerShop.Controllers
     public class ItemsController : BaseApiController
     {
         private readonly IItemsRepository _itemsRepository;
+        private readonly IOrdersRepository _ordersRepository;
 
-        public ItemsController(IItemsRepository itemsRepository)
+        public ItemsController(IItemsRepository itemsRepository, IOrdersRepository ordersRepository)
         {
             _itemsRepository = itemsRepository;
+            _ordersRepository = ordersRepository;
         }
 
         [HttpGet]
@@ -56,6 +59,25 @@ namespace FlowerShop.Controllers
         {
             var item = await _itemsRepository.RemoveItem(id);
             return item == null ? NotFound() : Ok(ItemDTO.FromItem(item));
+        }
+
+        [HttpPut("addItem/{itemId}/{orderId}")]
+        public async Task<ActionResult<ItemDTO>> AddItemToCart(Guid itemId, Guid orderId)
+        {
+            var order = await _ordersRepository.GetById(orderId);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            var item = await _itemsRepository.GetById(itemId);
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            var updatedItem = await _itemsRepository.AddItemToOrder(item, order);
+            return updatedItem == null ? NotFound() : Ok(ItemDTO.FromItem(updatedItem));
         }
     }
 }

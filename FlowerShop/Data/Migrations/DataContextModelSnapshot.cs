@@ -163,7 +163,7 @@ namespace FlowerShop.Data.Migrations
                     b.HasIndex("OrderID")
                         .IsUnique();
 
-                    b.ToTable("Deliveries");
+                    b.ToTable("Deliveries", (string)null);
                 });
 
             modelBuilder.Entity("FlowerShop.Models.Item", b =>
@@ -193,7 +193,7 @@ namespace FlowerShop.Data.Migrations
 
                     b.HasIndex("OrderID");
 
-                    b.ToTable("Items");
+                    b.ToTable("Items", (string)null);
                 });
 
             modelBuilder.Entity("FlowerShop.Models.Merchandise", b =>
@@ -220,7 +220,7 @@ namespace FlowerShop.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Merchandises");
+                    b.ToTable("Merchandises", (string)null);
                 });
 
             modelBuilder.Entity("FlowerShop.Models.MerchandiseCategory", b =>
@@ -236,7 +236,7 @@ namespace FlowerShop.Data.Migrations
 
                     b.HasIndex("ParentCategoryID");
 
-                    b.ToTable("MerchandiseCategories");
+                    b.ToTable("MerchandiseCategories", (string)null);
                 });
 
             modelBuilder.Entity("FlowerShop.Models.Order", b =>
@@ -256,7 +256,7 @@ namespace FlowerShop.Data.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("FlowerShop.Models.OrderLog", b =>
@@ -277,7 +277,7 @@ namespace FlowerShop.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("OrderLogs");
+                    b.ToTable("OrderLogs", (string)null);
                 });
 
             modelBuilder.Entity("MerchandiseMerchandiseCategory", b =>
@@ -292,7 +292,7 @@ namespace FlowerShop.Data.Migrations
 
                     b.HasIndex("MerchandisesID");
 
-                    b.ToTable("MerchandiseMerchandiseCategory");
+                    b.ToTable("MerchandiseMerchandiseCategory", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

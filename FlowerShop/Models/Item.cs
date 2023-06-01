@@ -12,7 +12,9 @@ namespace FlowerShop.Models
 
         public virtual Merchandise Merchandise { get; set; }
 
-        public virtual Order Order { get; set; }
+        public Guid? OrderID { get; set; }
+
+        public virtual Order? Order { get; set; }
 
         public string? CountryOfOrigin { get; set; }
 
