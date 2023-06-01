@@ -19,7 +19,7 @@ namespace FlowerShop.Repositories
 
         public async Task<Order?> GetById(Guid id)
         {
-            return await _dataContext.Orders.SingleOrDefaultAsync(i => i.ID == id);
+            return await _dataContext.Orders.Include(o => o.Items).SingleOrDefaultAsync(i => i.ID == id);
         }
 
         public async Task<IEnumerable<Order>> GetBy(
