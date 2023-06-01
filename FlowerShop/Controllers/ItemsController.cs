@@ -62,7 +62,7 @@ namespace FlowerShop.Controllers
         }
 
         [HttpPut("addItem/{itemId}/{orderId}")]
-        public async Task<ActionResult<OrderDTO>> AddItemToCart(Guid itemId, Guid orderId)
+        public async Task<ActionResult<ItemDTO>> AddItemToCart(Guid itemId, Guid orderId)
         {
             var order = await _ordersRepository.GetById(orderId);
             if (order == null)

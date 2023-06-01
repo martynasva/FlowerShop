@@ -26,7 +26,7 @@ namespace FlowerShop.Repositories
             string? userName = null,
             string? status = null)
         {
-            var query = _dataContext.Orders.AsQueryable();
+            var query = _dataContext.Orders.Include(o => o.Items).AsQueryable();
 
             if (userName != null) query = query.Where(i => i.User.Name == userName);
             if (!string.IsNullOrEmpty(status)) query = query.Where(i => i.OrderStatus != null && i.OrderStatus.ToString().ToLower() == status.ToLower());
