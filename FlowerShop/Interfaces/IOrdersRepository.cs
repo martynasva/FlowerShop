@@ -18,7 +18,5 @@ namespace FlowerShop.Interfaces
         public Task<Order?> RemoveOrder(Guid orderID);
 
         public Task<Order?> UpdateOrder(Order updatedOrder);
-
-        public Task<Order?> AddItemToOrder(Item item, Order orderToUpdate);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FlowerShop.Utility;
+using Microsoft.Extensions.Hosting;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,7 +17,7 @@ namespace FlowerShop.Models
 
         public virtual Delivery Delivery { get; set; }
 
-        public virtual ICollection<Item> Items { get; set; }
+        public virtual ICollection<Item> Items { get; } = new List<Item>();
 
 
         [Column("OrderStatus")]

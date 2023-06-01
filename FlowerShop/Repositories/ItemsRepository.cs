@@ -61,5 +61,30 @@ namespace FlowerShop.Repositories
             await _dataContext.SaveChangesAsync();
             return updatedItem;
         }
+
+        public async Task<Item?> AddItemToOrder(Item itemToAdd, Order orderToUpdate)
+        {
+            var item = await GetById(itemToAdd.ID);
+            if (item == null) return null;
+
+            var order = await _dataContext.Orders.FindAsync(orderToUpdate.ID);
+            if (order == null) return null;
+
+            //orderToUpdate.Items.Add(item);
+            //itemToAdd.OrderID = order.ID;
+            itemToAdd.Order = order;
+
+            //item.Order = order;
+            //order.Items.Add(itemToAdd);
+
+            /*Console.WriteLine(orderToUpdate.Items.First<Item>().ID);
+            Console.WriteLine(item.Order.ID);*/
+
+            _dataContext.Entry(item).CurrentValues.SetValues(itemToAdd);
+            //_dataContext.Entry(order).CurrentValues.SetValues(orderToUpdate);
+
+            await _dataContext.SaveChangesAsync();
+            return item;
+        }
     }
 }
